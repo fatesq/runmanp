@@ -1,16 +1,38 @@
 import React from 'react';
 import { Icon } from 'antd';
-import { SegmentedControl, NavBar, Drawer, List } from 'antd-mobile';
+import { SegmentedControl, TabBar, Drawer, List } from 'antd-mobile';
 import { Route, Redirect, Switch, NavLink } from 'dva/router';
 import { getRoutes } from '../utils/utils';
+import GetOrder from '../routes/Home';
+import Order from '../routes/Home/Order';
 import styles from './MobileLayout.less';
 
 class MobileLayout extends React.PureComponent {
   state = {
     open: false,
+    selectedTab: '1',
   }
   onOpenChange = () => {
     this.setState({ open: !this.state.open });
+  }
+
+  renderContent = (pageText) => {
+    const { routerData, match } = this.props;
+    // return (
+    //   <Switch>
+    //     {getRoutes(match.path, routerData).map(item =>
+    //       (
+    //         <Route
+    //           key={item.key}
+    //           path={item.path}
+    //           component={item.component}
+    //           exact={item.exact}
+    //         />
+    //       )
+    //     )}
+    //     <Redirect exact from="/" to="/deliver" />
+    //   </Switch>
+    // );
   }
 
   render() {
@@ -38,7 +60,6 @@ class MobileLayout extends React.PureComponent {
         </List.Item>
       </List>
     );
-    const { routerData, match } = this.props;
     return (
       <div>
         {
@@ -59,37 +80,83 @@ class MobileLayout extends React.PureComponent {
           open={this.state.open}
           onOpenChange={this.onOpenChange}
         >
-          <div className={styles['detail-header-bg']}>
-            <div id="head" className={styles['header-dom']}>
-              <div className={`${styles['mui-flex']} ${styles['main-dom']}`}>
-                <div className={styles['left-btns']}>
-                  <Icon type="user" className={styles.icon} onClick={this.onOpenChange} />
-                </div>
-                <ul className={`${styles.cells} ${styles['header-nav']}`}>
-                  <NavLink to="/home/deliver" activeClassName={styles.actives} ><li data-index="0" data-x="0" className="active">帮我送</li></NavLink>
-                  <NavLink to="/home/get" activeClassName={styles.actives} ><li data-index="1" data-x="75">帮我取</li></NavLink>
-                  <NavLink to="/home/buy" activeClassName={styles.actives} ><li data-index="2" data-x="150">帮我买</li></NavLink>
-                  <NavLink to="/home/todo" activeClassName={styles.actives} ><li data-index="3" data-x="225">帮办事</li></NavLink>
-                </ul>
-                <div className={styles['right-btns']}>
-                  <Icon type="message" className={styles.icon} />
-                </div>
-              </div>
-            </div>
+          <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0 }}>
+            <TabBar
+              unselectedTintColor="#949494"
+              tintColor="#33A3F4"
+              barTintColor="white"
+              hidden={this.state.hidden}
+            >
+              <TabBar.Item
+                title="接单"
+                key="get"
+                icon={<Icon type="rocket" style={{ fontSize: 21 }} />}
+                selectedIcon={<Icon type="rocket" style={{ fontSize: 21, color: '#108ee9' }} />}
+                selected={this.state.selectedTab === '1'}
+                onPress={() => {
+                  this.setState({
+                    selectedTab: '1',
+                  });
+                }}
+                data-seed="logId"
+              >
+                {<GetOrder />}
+              </TabBar.Item>
+              <TabBar.Item
+                title="已接"
+                key="post"
+                icon={
+                  <div style={{
+                    width: '22px',
+                    height: '22px',
+                    background: 'url(https://gw.alipayobjects.com/zos/rmsportal/BTSsmHkPsQSPTktcXyTV.svg) center center /  21px 21px no-repeat' }}
+                  />
+                }
+                selectedIcon={
+                  <div style={{
+                    width: '22px',
+                    height: '22px',
+                    background: 'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat' }}
+                  />
+                }
+                selected={this.state.selectedTab === '2'}
+                onPress={() => {
+                  this.setState({
+                    selectedTab: '2',
+                  });
+                }}
+                data-seed="logId1"
+              >
+                {<Order />}
+              </TabBar.Item>
+              <TabBar.Item
+                title="我的"
+                key="center"
+                icon={
+                  <div style={{
+                    width: '22px',
+                    height: '22px',
+                    background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  21px 21px no-repeat' }}
+                  />
+                }
+                selectedIcon={
+                  <div style={{
+                    width: '22px',
+                    height: '22px',
+                    background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  21px 21px no-repeat' }}
+                  />
+                }
+                selected={this.state.selectedTab === '3'}
+                onPress={() => {
+                  this.setState({
+                    selectedTab: '3',
+                  });
+                }}
+              >
+                {this.renderContent('Friend')}
+              </TabBar.Item>
+            </TabBar>
           </div>
-          <Switch>
-            {getRoutes(match.path, routerData).map(item =>
-              (
-                <Route
-                  key={item.key}
-                  path={item.path}
-                  component={item.component}
-                  exact={item.exact}
-                />
-              )
-            )}
-            <Redirect exact from="/" to="/deliver" />
-          </Switch>
         </Drawer>
       </div>
     );
