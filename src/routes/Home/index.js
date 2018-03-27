@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'dva';
 import { Icon } from 'antd';
 import { NavBar, Tabs, Card, List, Button } from 'antd-mobile';
 
@@ -9,10 +10,39 @@ const tabs = [
   { title: '离我最近', sub: '2' },
 ];
 
+@connect(({ home }) => ({ home }))
 export default class GetOrder extends React.PureComponent {
+  componentDidMount() {
+    const u = navigator.userAgent;
+    const app = navigator.appVersion;
+    const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // g
+    const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
+    console.log(isAndroid, isIOS, app);
+    if (isAndroid) {
+      // 这个是安卓操作系统
+    }
+    if (isIOS && window.iOSNative) {
+      // 这个是ios操作系统
+      const info = iOSNative.getUserInfo();
+      console.log(info);
+      alert(info);
+      this.props.dispatch({
+        type: 'home/list',
+        payload: {
+          ...info,
+        },
+      });
+    }
+  }
+  test = () => {
+    const info = iOSNative.getUserInfo();
+    console.log(info);
+    alert(info);
+  }
   render() {
     return (
       <div>
+        <Button onClick={this.test}>测试</Button>
         <NavBar
           mode="light"
           icon={<Icon type="left" />}
