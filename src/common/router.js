@@ -107,7 +107,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../layouts/BlankLayout')),
     },
     '/home': {
-      component: dynamicWrapper(app, [], () => import('../layouts/MobileLayout')),
+      component: dynamicWrapper(app, ['home'], () => import('../layouts/MobileLayout')),
     },
     '/coupon': {
       component: dynamicWrapper(app, [], () => import('../routes/Center/Coupon.js')),

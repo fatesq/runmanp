@@ -29,15 +29,21 @@ export default class GetOrder extends React.PureComponent {
       this.props.dispatch({
         type: 'home/list',
         payload: {
-          ...info,
+          diu: '24416E26-9265-4557-B7A1-28B64AE2CD86',
+          locations: '118.783132,32.038221,1522153588',
         },
       });
     }
   }
   test = () => {
-    const info = iOSNative.getUserInfo();
-    console.log(info);
-    alert(info);
+    alert(123)
+    this.props.dispatch({
+      type: 'home/list',
+      payload: {
+        diu: '24416E26-9265-4557-B7A1-28B64AE2CD86',
+        locations: '118.783132,32.038221,1522153588',
+      },
+    });
   }
   render() {
     return (

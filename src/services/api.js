@@ -78,6 +78,9 @@ export async function queryNotices() {
   return request('/api/notices');
 }
 
-export async function getOrder() {
-  return request('/api/rail/railMonitor');
+export async function getOrder(params) {
+  return request('/api/rail/railMonitor', {
+    method: 'POST',
+    body: params,
+  });
 }
