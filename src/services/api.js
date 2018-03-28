@@ -1,6 +1,28 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
+export async function login(params) {
+  return request('/api/rider/login', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+export async function sendMessage(params) {
+  return request('/api/rider/sendCheckCode', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+export async function getOrder(params) {
+  return request('/api/rail/railMonitor', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
@@ -78,9 +100,3 @@ export async function queryNotices() {
   return request('/api/notices');
 }
 
-export async function getOrder(params) {
-  return request('/api/rail/railMonitor', {
-    method: 'POST',
-    body: params,
-  });
-}

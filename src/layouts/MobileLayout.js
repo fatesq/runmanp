@@ -1,16 +1,28 @@
 import React from 'react';
+import { connect } from 'dva';
 import { Icon } from 'antd';
-import { SegmentedControl, TabBar, Drawer, List } from 'antd-mobile';
+import { TabBar, Drawer, List } from 'antd-mobile';
 import { Route, Redirect, Switch, NavLink } from 'dva/router';
 import { getRoutes } from '../utils/utils';
 import GetOrder from '../routes/Home';
 import Order from '../routes/Home/Order';
 import styles from './MobileLayout.less';
 
+@connect(({ global, login, loading }) => ({
+  global,
+  openid: login.openid,
+  submitting: loading.effects['login/login'],
+}))
 class MobileLayout extends React.PureComponent {
   state = {
     open: false,
     selectedTab: '1',
+  }
+
+  componentWillMount() {
+    if (!this.props.openid) {
+      window.location.hash = '/user/login';
+    }
   }
   onOpenChange = () => {
     this.setState({ open: !this.state.open });

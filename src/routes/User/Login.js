@@ -22,8 +22,17 @@ export default class LoginPage extends Component {
     this.setState({ type });
   }
 
-  onGetCaptcha = () => {
-    alert('短信发送');
+  onGetCaptcha = (form) => {
+    form.validateFields(['mobile'], (err, values) => {
+      if (!err) {
+        this.props.dispatch({
+          type: 'login/message',
+          payload: {
+            phone: values.mobile,
+          },
+        });
+      }
+    });
   }
 
   handlePageType = () => {
@@ -33,11 +42,15 @@ export default class LoginPage extends Component {
   handleSubmit = (err, values) => {
     const { type } = this.state;
     console.log(values);
+    const info = {
+      checkCode: values.captcha,
+      phone: values.mobile,
+    };
     if (!err) {
       this.props.dispatch({
         type: 'login/login',
         payload: {
-          ...values,
+          ...info,
           // type,
         },
       });
