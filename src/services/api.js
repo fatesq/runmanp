@@ -22,6 +22,14 @@ export async function getOrder(params) {
   });
 }
 
+export async function receiveOrder(params) {
+  return request('/api/order/receiveOrder', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');

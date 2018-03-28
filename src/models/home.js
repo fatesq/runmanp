@@ -1,4 +1,4 @@
-import { getOrder } from '../services/api';
+import { getOrder, receiveOrder } from '../services/api';
 
 export default {
   namespace: 'home',
@@ -13,8 +13,14 @@ export default {
       const data = yield call(getOrder, payload);
       yield put({
         type: 'saveList',
-        payload: data,
+        payload: data.data,
       });
+    },
+    *receive({ payload }, { call, put }) {
+      const data = yield call(receiveOrder, payload);
+      if (data.status != '00') {
+        alert(data.msg);
+      }
     },
   },
 

@@ -10,7 +10,7 @@ import styles from './MobileLayout.less';
 
 @connect(({ global, login, loading }) => ({
   global,
-  openid: login.openid,
+  openid: login.id,
   submitting: loading.effects['login/login'],
 }))
 class MobileLayout extends React.PureComponent {
@@ -139,7 +139,7 @@ class MobileLayout extends React.PureComponent {
                 }}
                 data-seed="logId1"
               >
-                {<Order />}
+                {/* {<Order />} */}
               </TabBar.Item>
               <TabBar.Item
                 title="我的"

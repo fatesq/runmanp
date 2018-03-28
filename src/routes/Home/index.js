@@ -10,7 +10,7 @@ const tabs = [
   { title: '离我最近', sub: '2' },
 ];
 
-@connect(({ home }) => ({ home }))
+@connect(({ home, login}) => ({ home, login}))
 export default class GetOrder extends React.PureComponent {
   componentDidMount() {
     const u = navigator.userAgent;
@@ -43,6 +43,16 @@ export default class GetOrder extends React.PureComponent {
       });
     }
   }
+
+  sendOrder = (id) => {
+    this.props.dispatch({
+      type: 'home/receive',
+      payload: {
+        orderId: id,
+        riderId: this.props.login.id,
+      },
+    });
+  }
   render() {
     return (
       <div>
@@ -62,26 +72,26 @@ export default class GetOrder extends React.PureComponent {
           onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
         >
           <div style={{ height: '100%' }}>
-            { this.props.home.list.map(() => {
+            { this.props.home.list.map((item) => {
               return (
-                <List renderHeader={() => '帮我送'} style={{ marginBottom: 8, background: '#FFF' }}>
+                <List key={item.orderId} renderHeader={() => '帮我送'} style={{ marginBottom: 8, background: '#FFF' }}>
                   <Card full>
                     <Card.Header
                       title={
                         <div>
-                          <div>从: 奥体</div>
-                          <div>到: 莲花</div>
+                          <div>从: {item.sendStreet}</div>
+                          <div>到: {item.receiverStreet}</div>
                         </div>
                       }
                     />
                     <Card.Body>
                       <div>注:</div>
-                      <div>￥35</div>
+                      <div>￥{item.payPrice/100}</div>
                     </Card.Body>
                     <Card.Footer
                       style={{ alignItems: 'center', display: 'flex' }}
-                      content="立即送达"
-                      extra={<Button type="ghost" size="small">接单</Button>}
+                      content={item.departureTime}
+                      extra={<Button type="ghost" onClick={()=> {this.sendOrder(item.orderId)}} size="small">接单</Button>}
                     />
                   </Card>
                 </List>

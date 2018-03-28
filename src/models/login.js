@@ -7,8 +7,7 @@ export default {
   namespace: 'login',
 
   state: {
-    openid: undefined,
-    id: undefined,
+    id: localStorage.id,
   },
 
   effects: {
@@ -19,6 +18,7 @@ export default {
           type: 'changeOpenId',
           payload: response.obj,
         });
+        localStorage.id = response.obj.id
       }
       // Login successfully
       if (response.status === '00' && response.obj.phone) {
