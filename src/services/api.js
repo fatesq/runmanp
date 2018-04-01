@@ -29,6 +29,21 @@ export async function receiveOrder(params) {
   });
 }
 
+export async function cancelOrder(params) {
+  return request('/api/order/riderCancelOrder', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+
+export async function process(params) {
+  return request('/api/process', {
+    method: 'GET',
+    data: params,
+  });
+}
+
 
 
 export async function queryProjectNotice() {

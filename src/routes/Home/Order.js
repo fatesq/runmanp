@@ -1,182 +1,86 @@
 import React from 'react';
-import { Icon } from 'antd';
-import { NavBar, ListView } from 'antd-mobile';
+import { connect } from 'dva';
+import { Tabs, Card, List, Button } from 'antd-mobile';
 
-function MyBody(props) {
-  return (
-    <div className="am-list-body my-body">
-      <span style={{ display: 'none' }}>you can custom body wrap element</span>
-      {props.children}
-    </div>
-  );
-}
-const data = [
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-    title: 'Meet hotel',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
-    title: 'McDonald\'s invites you',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
-    title: 'Eat the week',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-];
-const NUM_SECTIONS = 5;
-const NUM_ROWS_PER_SECTION = 5;
-let pageIndex = 0;
 
-const dataBlobs = {};
-let sectionIDs = [];
-let rowIDs = [];
-function genData(pIndex = 0) {
-  for (let i = 0; i < NUM_SECTIONS; i++) {
-    const ii = (pIndex * NUM_SECTIONS) + i;
-    const sectionName = `Section ${ii}`;
-    sectionIDs.push(sectionName);
-    dataBlobs[sectionName] = sectionName;
-    rowIDs[ii] = [];
+const { Item } = List;
+const { Brief } = Item;
+const status = [{ title: '全部' }, { title: '待接单' }, { title: '待取单' }, { title: '配送中' },
+  { title: '已完成' }, { title: '已取消' }];
 
-    for (let jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
-      const rowName = `S${ii}, R${jj}`;
-      rowIDs[ii].push(rowName);
-      dataBlobs[rowName] = rowName;
-    }
+@connect(({ home, loading, login }) => ({
+  home,
+  userId: login.id,
+  submitting: loading.effects['order/list'],
+}))
+export default class Get extends React.PureComponent {
+  componentWillMount() {
+    this.getList();
   }
-  sectionIDs = [...sectionIDs];
-  rowIDs = [...rowIDs];
-}
-export default class Order extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
-    const getRowData = (dataBlob, sectionID, rowID) => dataBlob[rowID];
-
-    const dataSource = new ListView.DataSource({
-      getRowData,
-      getSectionHeaderData: getSectionData,
-      rowHasChanged: (row1, row2) => row1 !== row2,
-      sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+  getList = (data, index) => {
+    this.props.dispatch({
+      type: 'home/order',
+      payload: {
+        riderId: this.props.userId,
+        bean: 'order',
+        method: 'pageOrder',
+        page: 1,
+        rows: 20,
+        orderStatus: index ? index : '',
+      },
     });
-
-    this.state = {
-      dataSource,
-      isLoading: true,
-      height: document.documentElement.clientHeight * (3 / 4),
-    };
   }
-
-  componentDidMount() {
-    const hei = document.documentElement.clientHeight;
-    // simulate initial Ajax
-    setTimeout(() => {
-      genData();
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlobs, sectionIDs, rowIDs),
-        isLoading: false,
-        height: hei,
-      });
-    }, 600);
+  toInfo = (item) => {
+    this.props.dispatch({
+      type: 'home/info',
+      payload: item,
+    });
   }
-
-  onEndReached = (event) => {
-    // load new data
-    // hasMore: from backend data, indicates whether it is the last page, here is false
-    if (this.state.isLoading && !this.state.hasMore) {
-      return;
-    }
-    console.log('reach end', event);
-    this.setState({ isLoading: true });
-    setTimeout(() => {
-      genData(++pageIndex);
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlobs, sectionIDs, rowIDs),
-        isLoading: false,
-      });
-    }, 1000);
+  cancelOrder = (orderId) => {
+    this.props.dispatch({
+      type: 'home/cancel',
+      payload: {
+        riderId: this.props.userId,
+        orderId,
+      },
+    });
+    this.props.restart(1);
   }
-
   render() {
-    const separator = (sectionID, rowID) => (
-      <div
-        key={`${sectionID}-${rowID}`}
-        style={{
-          backgroundColor: '#F5F5F9',
-          height: 8,
-          borderTop: '1px solid #ECECED',
-          borderBottom: '1px solid #ECECED',
-        }}
-      />
-    );
-    let index = data.length - 1;
-    const row = (rowData, sectionID, rowID) => {
-      if (index < 0) {
-        index = data.length - 1;
-      }
-      const obj = data[index--];
-      return (
-        <div key={rowID} style={{ padding: '0 15px' }}>
-          <div
-            style={{
-              lineHeight: '50px',
-              color: '#888',
-              fontSize: 18,
-              borderBottom: '1px solid #F6F6F6',
-            }}
-          >{obj.title}</div>
-          <div style={{ display: '-webkit-box', display: 'flex', padding: '15px 0' }}>
-            <img style={{ height: '64px', marginRight: '15px' }} src={obj.img} alt="" />
-            <div style={{ lineHeight: 1 }}>
-              <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.des}</div>
-              <div><span style={{ fontSize: '30px', color: '#FF6E27' }}>35</span>¥ {rowID}</div>
-            </div>
-          </div>
-        </div>
-      );
-    };
-
+    console.log(this.props.home.order);
     return (
-      <div>
-        <NavBar
-          mode="light"
-          icon={<Icon type="left" />}
-          onLeftClick={() => console.log('onLeftClick')}
-          rightContent={
-            <Icon type="bell" style={{ fontSize: 22 }} />
-          }
-        >南京市
-        </NavBar>
-        <ListView
-          ref={el => this.lv = el}
-          dataSource={this.state.dataSource}
-          renderHeader={() => <span>header</span>}
-          renderFooter={() => (
-            <div style={{ padding: 30, textAlign: 'center' }}>
-              {this.state.isLoading ? 'Loading...' : 'Loaded'}
-            </div>)
-          }
-          renderSectionHeader={sectionData => (
-            <div>{`Task ${sectionData.split(' ')[1]}`}</div>
-          )}
-          renderBodyComponent={() => <MyBody />}
-          renderRow={row}
-          renderSeparator={separator}
-          style={{
-            height: this.state.height,
-            overflow: 'auto',
-          }}
-          pageSize={4}
-          onScroll={() => { console.log('scroll'); }}
-          scrollRenderAheadDistance={500}
-          onEndReached={this.onEndReached}
-          onEndReachedThreshold={10}
-        />
-      </div>
+      <Tabs
+        tabs={status}
+        onChange={(tab, index) => this.getList(tab, index)}
+      >
+        <div style={{ height: '100%', backgroundColor: '#fff' }}>
+          { this.props.home.order.map((item) => {
+            return (
+              <Card key={item.orderId}>
+                <Card.Body>
+                  <Item extra={`${status[item.orderStatus].title}`} align="top" multipleLine>
+                    单号：<span style={{ fontSize: '12px' }}>{item.orderId}</span>
+                    <Brief>
+                      <div>地址：{item.receiverAddress}</div>
+                      <div>收件人：{item.receiverName}</div>
+                      <div>电话：{item.receiverPhone}</div>
+                    </Brief>
+                  </Item>
+                  <Item extra={`合计 ${item.payPrice / 100}`}>{item.createTime}</Item>
+                </Card.Body>
+                <Card.Footer
+                  extra={
+                    <div>
+                      <Button type="ghost" inline onClick={() => { this.toInfo(item); }} size="small" style={{ marginRight: '4px' }}>查看订单</Button>
+                      <Button type="ghost" inline onClick={() => { this.cancelOrder(item.orderId); }} size="small" style={{ marginRight: '4px' }}>取消订单</Button>
+                    </div>
+                  }
+                />
+              </Card>
+            );
+          })}
+        </div>
+      </Tabs>
     );
   }
 }

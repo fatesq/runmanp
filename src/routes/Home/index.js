@@ -13,6 +13,16 @@ const tabs = [
 @connect(({ home, login}) => ({ home, login}))
 export default class GetOrder extends React.PureComponent {
   componentDidMount() {
+   this.props.restart();
+   this.getOrder()
+   this.interval = setInterval(() => this.getOrder(), 15000);  
+  }
+
+  componentWillUnmount() {  
+    clearInterval(this.interval);  
+  }  
+
+  getOrder = () => {
     const u = navigator.userAgent;
     const app = navigator.appVersion;
     const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // g
@@ -38,20 +48,18 @@ export default class GetOrder extends React.PureComponent {
         type: 'home/list',
         payload: {
           diu: '24416E26-9265-4557-B7A1-28B64AE2CD86',
-          locations: '118.783132,32.038221,1522153588',
+          locations: '118.804875,32.011594,1522417977',
         },
       });
     }
   }
 
-  sendOrder = (id) => {
+  sendOrder = (item) => {
     this.props.dispatch({
-      type: 'home/receive',
-      payload: {
-        orderId: id,
-        riderId: this.props.login.id,
-      },
-    });
+      type: 'home/info',
+      payload: item,
+    }).then(()=>  this.props.restart(2))
+    
   }
   render() {
     return (
@@ -61,7 +69,7 @@ export default class GetOrder extends React.PureComponent {
           icon={<Icon type="left" />}
           onLeftClick={() => console.log('onLeftClick')}
           rightContent={
-            <Icon type="bell" style={{ fontSize: 22 }} />
+            <Icon type="bell" onClick={this.getOrder} style={{ fontSize: 22 }} />
           }
         >南京市
         </NavBar>
@@ -91,7 +99,7 @@ export default class GetOrder extends React.PureComponent {
                     <Card.Footer
                       style={{ alignItems: 'center', display: 'flex' }}
                       content={item.departureTime}
-                      extra={<Button type="ghost" onClick={()=> {this.sendOrder(item.orderId)}} size="small">接单</Button>}
+                      extra={<Button type="ghost" onClick={()=> {this.sendOrder(item)}} size="small">接单</Button>}
                     />
                   </Card>
                 </List>
@@ -99,7 +107,7 @@ export default class GetOrder extends React.PureComponent {
             })}
           </div>
           <div style={{ height: '100%', backgroundColor: '#fff' }}>
-            Content of second tab
+            
           </div>
         </Tabs>
       </div>
