@@ -44,6 +44,19 @@ export async function process(params) {
   });
 }
 
+export async function alipayWithdraw(params) {
+  return request('/api/rider/alipayWithdraw', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+export async function wxpayWithdraw(params) {
+  return request('/api/rider/wxpayWithdraw', {
+    method: 'POST',
+    data: params,
+  });
+}
 
 
 export async function queryProjectNotice() {

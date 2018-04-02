@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Switch, Card, List, Button, WhiteSpace } from 'antd-mobile';
+import { NavLink } from 'dva/router';
 import styles from './index.less'
 
 export default class Center extends React.PureComponent {
@@ -33,9 +34,11 @@ export default class Center extends React.PureComponent {
 						</List>
 						<WhiteSpace />
 						<List>
-							<List.Item arrow="horizontal">
-								我的钱包
-							</List.Item>
+							<NavLink to="/with">
+								<List.Item arrow="horizontal">
+								我的钱包 
+								</List.Item>
+							</NavLink>
 							<List.Item arrow="horizontal">
 								评价记录
 							</List.Item>

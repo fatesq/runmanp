@@ -103,6 +103,9 @@ export const getRouterData = (app) => {
     '/home': {
       component: dynamicWrapper(app, ['home'], () => import('../layouts/MobileLayout')),
     },
+    '/with': {
+      component: dynamicWrapper(app, [], () => import('../routes/Home/Withdraw')),
+    },
     '/coupon': {
       component: dynamicWrapper(app, [], () => import('../routes/Center/Coupon.js')),
     },
