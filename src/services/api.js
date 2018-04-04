@@ -44,7 +44,12 @@ export async function process(params) {
   });
 }
 
-
+export async function modifyRider(params) {
+  return request('/api/rider/modifyRider', {
+    method: 'POST',
+    data: params,
+  });
+}
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');

@@ -9,7 +9,6 @@ export default {
   state: {
     id: localStorage.id,
   },
-
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(login, payload);
@@ -19,6 +18,8 @@ export default {
           payload: response.obj,
         });
         localStorage.id = response.obj.id
+        localStorage.depositStatus = response.obj.depositStatus
+        localStorage.realName = response.obj.realName
       }
       // Login successfully
       if (response.status === '00' && response.obj.phone) {

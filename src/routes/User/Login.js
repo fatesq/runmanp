@@ -40,11 +40,24 @@ export default class LoginPage extends Component {
   }
 
   handleSubmit = (err, values) => {
+    const u = navigator.userAgent;
+    const app = navigator.appVersion;
+    const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // g
+    const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
+    console.log(isAndroid, isIOS, app);
+    if (isAndroid) {
+      // 这个是安卓操作系统
+    }
+    if (isIOS && window.iOSNative) {
+      // 这个是ios操作系统
+      const info = iOSNative.getUserInfo();
+    }
     const { type } = this.state;
     console.log(values);
     const info = {
       checkCode: values.captcha,
       phone: values.mobile,
+      city: '南京' || info.city,
     };
     if (!err) {
       this.props.dispatch({
