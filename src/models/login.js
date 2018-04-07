@@ -19,7 +19,12 @@ export default {
         });
         localStorage.id = response.obj.id
         localStorage.depositStatus = response.obj.depositStatus
-        localStorage.realName = response.obj.realName
+        localStorage.blackFlag = response.obj.blackFlag
+        localStorage.amount = response.obj.amount
+        localStorage.deposit = response.obj.deposit
+        localStorage.phone = response.obj.phone
+        localStorage.orderCount = response.obj.orderCount
+        localStorage.star = response.obj.star
       }
       // Login successfully
       if (response.status === '00' && response.obj.phone) {

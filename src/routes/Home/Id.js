@@ -93,7 +93,11 @@ export default class Id extends React.PureComponent {
 		}
 	}
 	submit = () => {
-		if(this.state.files.length < 1|| this.state.files2.length < 1  ){
+		if(this.state.files.length < 1){
+			alert('请上传照片')
+			return;
+		}
+		if(this.state.files2.length < 1){
 			alert('请上传照片')
 			return;
 		}
@@ -102,7 +106,7 @@ export default class Id extends React.PureComponent {
 			return;
 		}
 		info.realName = this.state.realName
-		
+		info.id = this.props.id
 		modifyRider(info).then(res=>{
 			if(res.status == '00') {
 				window.location.hash = '/yajin'
@@ -115,31 +119,40 @@ export default class Id extends React.PureComponent {
 		const { files, files2 } = this.state;
 		return(
 			<List>
-				<InputItem
-					placeholder="填写您的真实姓名"
-					clear
-					moneyKeyboardAlign="left"
-					onChange={val=> this.setState({realName: val})}
-				>姓名</InputItem>
-				<List.Item>提供身份证头像面</List.Item>
-				<div style={{ textAlign: 'center'}}>
-					<ImagePicker
-						files={files}
-						onChange={this.onChange}
-						onImageClick={(index, fs) => console.log(index, fs)}
-						selectable={files.length < 3}
-						multiple={this.state.multiple}
-					/>
-				</div>
-				<List.Item>提供手持身份证头像面合照</List.Item>
-				<ImagePicker
-          files={files2}
-          onChange={this.onChange2}
-          onImageClick={(index, fs) => console.log(index, fs)}
-          selectable={files2.length < 3}
-          multiple={this.state.multiple}
-        />
-				<Button onClick={this.submit}>提交认证</Button>
+				{ 
+					localStorage.blackFlag == 4 ?
+					(
+						<div>
+							<InputItem
+								placeholder="填写您的真实姓名"
+								clear
+								moneyKeyboardAlign="left"
+								onChange={val=> this.setState({realName: val})}
+							>姓名</InputItem>
+							<List.Item>提供身份证头像面</List.Item>
+							<div style={{ textAlign: 'center'}}>
+								<ImagePicker
+									files={files}
+									onChange={this.onChange}
+									onImageClick={(index, fs) => console.log(index, fs)}
+									selectable={files.length < 3}
+									multiple={this.state.multiple}
+								/>
+							</div>
+							<List.Item>提供手持身份证头像面合照</List.Item>
+							<ImagePicker
+								files={files2}
+								onChange={this.onChange2}
+								onImageClick={(index, fs) => console.log(index, fs)}
+								selectable={files2.length < 3}
+								multiple={this.state.multiple}
+							/>
+							<Button onClick={this.submit}>提交认证</Button>
+						</div>
+					)
+					: (<Button>待审核</Button>)
+				}
+				
 			</List>	
 		);
 	}

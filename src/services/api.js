@@ -44,8 +44,57 @@ export async function process(params) {
   });
 }
 
+
 export async function modifyRider(params) {
   return request('/api/rider/modifyRider', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+export async function alipayWithdraw(params) {
+  return request('/api/rider/alipayWithdraw', {
+    method: 'POST',
+    data: params,
+  });
+}
+export async function wxpayWithdraw(params) {
+  return request('/api/rider/wxpayWithdraw', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+export async function alipayDeposit(params) {
+  return request('/api/rider/alipayDeposit', {
+    method: 'POST',
+    data: params,
+  });
+}
+export async function wxpayDeposit(params) {
+  return request('/api/rider/wxpayDeposit', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+
+export async function alipayRefundDeposit(params) {
+  return request('/api/rider/alipayRefundDeposit', {
+    method: 'POST',
+    data: params,
+  });
+}
+export async function wxpayRefundDeposit(params) {
+  return request('/api/rider/wxpayRefundDeposit', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+
+export async function getConfig(params) {
+  return request('api/config/getConfig', {
     method: 'POST',
     data: params,
   });

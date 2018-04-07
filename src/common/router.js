@@ -103,6 +103,9 @@ export const getRouterData = (app) => {
     '/home': {
       component: dynamicWrapper(app, ['home'], () => import('../layouts/MobileLayout')),
     },
+    '/with': {
+      component: dynamicWrapper(app, [], () => import('../routes/Home/Withdraw')),
+    },
     '/coupon': {
       component: dynamicWrapper(app, [], () => import('../routes/Center/Coupon.js')),
     },
@@ -117,6 +120,9 @@ export const getRouterData = (app) => {
     },
     '/yajin': {
       component: dynamicWrapper(app, ['login'], () => import('../routes/Home/Yajin')),
+    },
+    '/pay': {
+      component: dynamicWrapper(app, ['login'], () => import('../routes/Home/Pay')),
     },
     
   };

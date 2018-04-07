@@ -43,10 +43,10 @@ class UserLayout extends React.PureComponent {
               <div className={styles.header}>
                 <Link to="/">
                   <img alt="logo" className={styles.logo} src={logo} />
-                  <span className={styles.title}>你爸爸</span>
+                  <span className={styles.title}>巴比跑腿</span>
                 </Link>
               </div>
-              <div className={styles.desc}>没事别使唤你爸爸</div>
+              <div className={styles.desc}> </div>
             </div>
             <Switch>
               {getRoutes(match.path, routerData).map(item =>
@@ -62,7 +62,6 @@ class UserLayout extends React.PureComponent {
               <Redirect exact from="/user" to="/user/login" />
             </Switch>
           </div>
-          <GlobalFooter links={links} copyright={copyright} />
         </div>
       </DocumentTitle>
     );
