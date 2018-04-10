@@ -25,6 +25,7 @@ export default {
         localStorage.phone = response.obj.phone
         localStorage.orderCount = response.obj.orderCount
         localStorage.star = response.obj.star
+        localStorage.realName = response.obj.realName
       }
       // Login successfully
       if (response.status === '00' && response.obj.phone) {

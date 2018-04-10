@@ -120,7 +120,7 @@ export default class Id extends React.PureComponent {
 		return(
 			<List>
 				{ 
-					localStorage.blackFlag == 4 ?
+					localStorage.blackFlag == 2 ?
 					(
 						<div>
 							<InputItem
@@ -150,7 +150,7 @@ export default class Id extends React.PureComponent {
 							<Button onClick={this.submit}>提交认证</Button>
 						</div>
 					)
-					: (<Button>待审核</Button>)
+					: (<Button onClick={()=>{window.location.hash = '/user/login'}}>待审核</Button>)
 				}
 				
 			</List>	

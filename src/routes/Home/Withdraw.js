@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { createForm } from 'rc-form';
-import { List, Picker, InputItem, Button } from 'antd-mobile';
+import { List, Picker, InputItem, Button, NavBar, Icon } from 'antd-mobile';
 import { alipayWithdraw, wxpayWithdraw } from '../../services/api';
 @connect(({ login }) => ({
   userId: login.id,
@@ -47,27 +47,35 @@ export default class Withdraw extends React.PureComponent {
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
     return (
-      <List>
-        <InputItem
-          {...getFieldProps('account', {
-            // initialValue: 'little ant',
-            rules: [
-              { required: true, message: '请输入金额' },
-            ],
-          })}
-          clear
-          error={!!getFieldError('account')}
-          onErrorClick={() => {
-            alert(getFieldError('account').join('、'));
-          }}
-          placeholder="请输入金额"
-        >提现金额
-        </InputItem>
-        <Picker data={this.state.data} value={this.state.pickerValue} onOk={v => this.setState({ pickerValue: v })} cols={1} >
-          <List.Item arrow="horizontal">支付方式</List.Item>
-        </Picker>
-        <Button onClick={this.onOk}>确认提现</Button>
-      </List>  
+      <div>
+        <NavBar
+          mode="light"
+          icon={<Icon type="left" />}
+          onLeftClick={() => { window.location.hash = '/'; }}
+        >余额提现
+        </NavBar>
+        <List>
+          <InputItem
+            {...getFieldProps('account', {
+              // initialValue: 'little ant',
+              rules: [
+                { required: true, message: '请输入金额' },
+              ],
+            })}
+            clear
+            error={!!getFieldError('account')}
+            onErrorClick={() => {
+              alert(getFieldError('account').join('、'));
+            }}
+            placeholder="请输入金额"
+          >提现金额
+          </InputItem>
+          <Picker data={this.state.data} value={this.state.pickerValue} onOk={v => this.setState({ pickerValue: v })} cols={1} >
+            <List.Item arrow="horizontal">支付方式</List.Item>
+          </Picker>
+          <Button onClick={this.onOk}>确认提现</Button>
+        </List>  
+      </div>  
     )
   }
 

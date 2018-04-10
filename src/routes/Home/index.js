@@ -12,6 +12,9 @@ const tabs = [
 
 @connect(({ home, login}) => ({ home, login}))
 export default class GetOrder extends React.PureComponent {
+  state ={
+    city: '',
+  }
   componentDidMount() {
    this.props.restart();
    this.getOrder()
@@ -30,20 +33,29 @@ export default class GetOrder extends React.PureComponent {
     console.log(isAndroid, isIOS, app);
     if (isAndroid) {
       // 这个是安卓操作系统
-    }
-    if (isIOS && window.iOSNative) {
-      // 这个是ios操作系统
-      const info = iOSNative.getUserInfo();
-      console.log(info);
-      alert(info);
+      const info = window.android.getUserInfo();
+      this.setState({city: info.city || ''});
       this.props.dispatch({
         type: 'home/list',
         payload: {
-          diu: '24416E26-9265-4557-B7A1-28B64AE2CD86',
-          locations: '118.783132,32.038221,1522153588',
+          diu: info.diu || '24416E26-9265-4557-B7A1-28B64AE2CD86',
+          locations: info.locations || '118.783132,32.038221,1522153588',
+        },
+      });
+    }
+    if (isIOS && window.iOSNative) {
+      // 这个是ios操作系统
+      const info = Native.getUserInfo();
+      this.setState({city: info.city || ''});
+      this.props.dispatch({
+        type: 'home/list',
+        payload: {
+          diu: info.diu || '24416E26-9265-4557-B7A1-28B64AE2CD86',
+          locations: info.locations || '118.783132,32.038221,1522153588',
         },
       });
     } else {
+      this.setState({city: '南京'});
       this.props.dispatch({
         type: 'home/list',
         payload: {
@@ -71,7 +83,7 @@ export default class GetOrder extends React.PureComponent {
           rightContent={
             <Icon type="bell" onClick={this.getOrder} style={{ fontSize: 22 }} />
           }
-        >南京市
+        >{this.state.city}
         </NavBar>
         <Tabs
           tabs={tabs}

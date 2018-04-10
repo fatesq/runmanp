@@ -25,12 +25,12 @@ class MobileLayout extends React.PureComponent {
     if (!this.props.openid) {
       window.location.hash = '/user/login';
     } 
-    // else if(localStorage.blackFlag != 4) {
-    //   window.location.hash = '/Id'
-    // }
-    // else if(localStorage.depositStatus == 2) {
-    //   window.location.hash = '/yajin'
-    // }
+    else if(localStorage.blackFlag != 4) {
+      window.location.hash = '/Id'
+    }
+    else if(localStorage.depositStatus == 2) {
+      window.location.hash = '/yajin'
+    }
   }
   onOpenChange = (tab = 1) => {
     this.setState({selectedTab: tab});

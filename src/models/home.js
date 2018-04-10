@@ -13,10 +13,12 @@ export default {
   effects: {
     *list({ payload }, { call, put }) {
       const data = yield call(getOrder, payload);
-      yield put({
-        type: 'saveList',
-        payload: data.data,
-      });
+      if(data.data){
+        yield put({
+          type: 'saveList',
+          payload: data.data,
+        });
+      }
     },
     *receive({ payload }, { call, put }) {
       const data = yield call(receiveOrder, payload);

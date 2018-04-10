@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { List, InputItem, Picker, Button } from 'antd-mobile';
+import { List, InputItem, Picker, Button, NavBar, Icon } from 'antd-mobile';
 import { getConfig, alipayDeposit, wxpayDeposit, alipayRefundDeposit, wxpayRefundDeposit} from '../../services/api'; 
 
 const u = navigator.userAgent;
@@ -16,11 +16,15 @@ export default class Yajin extends React.PureComponent {
   componentWillMount(){
     if (isAndroid) {
       // 这个是安卓操作系统
+      const info = Native.getUserInfo();
+      getConfig({city: info.city || '南京'}).then(res =>{
+        this.setState({deposit:res.obj.deposit})
+      })
     }
     if (isIOS && window.iOSNative) {
       // 这个是ios操作系统
-      const info = iOSNative.getUserInfo();
-      getConfig({city: info.city || 'nanjing'}).then(res =>{
+      const info = Native.getUserInfo();
+      getConfig({city: info.city || '南京'}).then(res =>{
         this.setState({deposit:res.obj.deposit})
       })
     } else {
@@ -80,6 +84,12 @@ export default class Yajin extends React.PureComponent {
     const {deposit} = this.state
     return(
       <div>
+        <NavBar
+          mode="light"
+          icon={<Icon type="left" />}
+          onLeftClick={() => { window.location.hash = '/'; }}
+        >押金
+        </NavBar>
         <p style={{fontSize: '16px', fontWeight: 600, textAlign: 'center', padding: '10px 10px'}}>当前押金</p>
         <p style={{fontSize: '16px', fontWeight: 600, textAlign: 'center', padding: '5px 10px'}}>￥ { deposit ? deposit : 0}</p>
         <Picker data={this.state.data} value={this.state.pickerValue} onOk={v => this.setState({ pickerValue: v })} cols={1} >

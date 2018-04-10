@@ -177,3 +177,10 @@ export async function queryNotices() {
   return request('/api/notices');
 }
 
+
+export async function addCooperation(params) {
+  return request('/api/partner/addCooperation', {
+    method: 'POST',
+    data: params,
+  });
+}
