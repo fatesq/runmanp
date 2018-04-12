@@ -43,9 +43,11 @@ export default class GetOrder extends React.PureComponent {
         },
       });
     }
-    if (isIOS && window.iOSNative) {
+    if (isIOS) {
       // 这个是ios操作系统
-      const info = Native.getUserInfo();
+      alert('getUserInfo之前');
+      const info = Native.getUserInfo('123');
+      alert(info);
       this.setState({city: info.city || ''});
       this.props.dispatch({
         type: 'home/list',

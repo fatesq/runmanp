@@ -16,14 +16,16 @@ export default class Yajin extends React.PureComponent {
   componentWillMount(){
     if (isAndroid) {
       // 这个是安卓操作系统
-      const info = Native.getUserInfo();
+      const info = window.android.getUserInfo();
       getConfig({city: info.city || '南京'}).then(res =>{
         this.setState({deposit:res.obj.deposit})
       })
     }
-    if (isIOS && window.iOSNative) {
+    if (isIOS) {
       // 这个是ios操作系统
-      const info = Native.getUserInfo();
+      alert('getUserInfo之前');
+      const info = Native.getUserInfo('123');
+      alert(info);
       getConfig({city: info.city || '南京'}).then(res =>{
         this.setState({deposit:res.obj.deposit})
       })
@@ -41,7 +43,12 @@ export default class Yajin extends React.PureComponent {
     }
     wxpayDeposit(info).then(res=>{
       if(res.status == '00'){
-        Native.wxDep()
+        if (isAndroid) {
+          window.android.wxDep(res);
+        }
+        if (isIOS) {
+          Native.wxDep(res)
+        }  
       }else{
         alert(res.msg)
       }
@@ -54,7 +61,12 @@ export default class Yajin extends React.PureComponent {
     }
     alipayDeposit(info).then(res=>{
       if(res.status == '00'){
-        Native.aliDep()
+        if (isAndroid) {
+          window.android.aliDep(res)
+        }
+        if (isIOS) {
+          Native.aliDep(res)
+        }
       }else{
         alert(res.msg)
       }
@@ -91,7 +103,7 @@ export default class Yajin extends React.PureComponent {
         >押金
         </NavBar>
         <p style={{fontSize: '16px', fontWeight: 600, textAlign: 'center', padding: '10px 10px'}}>当前押金</p>
-        <p style={{fontSize: '16px', fontWeight: 600, textAlign: 'center', padding: '5px 10px'}}>￥ { deposit ? deposit : 0}</p>
+        <p style={{fontSize: '16px', fontWeight: 600, textAlign: 'center', padding: '5px 10px'}}>￥ { deposit ? deposit / 100 : 0}</p>
         <Picker data={this.state.data} value={this.state.pickerValue} onOk={v => this.setState({ pickerValue: v })} cols={1} >
           <List.Item arrow="horizontal">支付方式</List.Item>
         </Picker>
@@ -99,6 +111,11 @@ export default class Yajin extends React.PureComponent {
           { this.state.pickerValue[0] == 1 ? '支付宝' : '微信' }
         </Button>
         <Button onClick={this.state.pickerValue[0] == 1 ? this.reAlwxpiPay : this.reWxPay}>退还押金</Button>
+        { localStorage.depositStatus == 2
+          ?
+          (<Button onClick={()=> { window.location.hash ='/user/login'}}>返回登录</Button>)
+          :''
+        }
       </div>
     )
   }

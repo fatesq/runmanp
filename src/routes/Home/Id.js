@@ -50,10 +50,10 @@ export default class Id extends React.PureComponent {
 			const file = files[0]
 			const prop = this.props
 			function uploadFile(client) {
-				if(file.file.name.split('.')[1]!='jpg'&&file.file.name.split('.')[1]!='jpeg'&&file.file.name.split('.')[1]!='png'&&file.file.name.split('.')[1]!='gif'){
-					alert('只允许上传格式为jpeg、jpg、png、gif格式的图片');
-					return false;
-				}
+				// if(file.file.name.split('.')[1]!='jpg'&&file.file.name.split('.')[1]!='jpeg'&&file.file.name.split('.')[1]!='png'&&file.file.name.split('.')[1]!='gif'){
+				// 	alert('只允许上传格式为jpeg、jpg、png、gif格式的图片');
+				// 	return false;
+				// }
 				return client.multipartUpload("/runningman/idcard/"+prop.id+"/"+file.file.name+"",file.file)
 					.then(res =>{
 						if(res.res.status === 200){
@@ -76,10 +76,10 @@ export default class Id extends React.PureComponent {
 			const file = files2[0]
 			const prop = this.props
 			function uploadFile2(client) {
-				if(file.file.name.split('.')[1]!='jpg'&&file.file.name.split('.')[1]!='jpeg'&&file.file.name.split('.')[1]!='png'&&file.file.name.split('.')[1]!='gif'){
-					alert('只允许上传格式为jpeg、jpg、png、gif格式的图片');
-					return false;
-				}
+				// if(file.file.name.split('.')[1]!='jpg'&&file.file.name.split('.')[1]!='jpeg'&&file.file.name.split('.')[1]!='png'&&file.file.name.split('.')[1]!='gif'){
+				// 	alert('只允许上传格式为jpeg、jpg、png、gif格式的图片');
+				// 	return false;
+				// }
 				return client.multipartUpload("/runningman/idcard/"+prop.id+"/"+file.file.name+"",file.file)
 					.then(res =>{
 						if(res.res.status === 200){
@@ -129,7 +129,7 @@ export default class Id extends React.PureComponent {
 								moneyKeyboardAlign="left"
 								onChange={val=> this.setState({realName: val})}
 							>姓名</InputItem>
-							<List.Item>提供身份证头像面</List.Item>
+							<List.Item>提供身份证背面</List.Item>
 							<div style={{ textAlign: 'center'}}>
 								<ImagePicker
 									files={files}

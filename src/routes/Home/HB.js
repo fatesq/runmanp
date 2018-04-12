@@ -59,7 +59,7 @@ export default class HB extends React.PureComponent {
             clear
             moneyKeyboardAlign="left"
           >投资金额</InputItem>
-          <Button>提交</Button>
+          <Button onClick={this.submit}>提交</Button>
         </List>
       </div>
     );
