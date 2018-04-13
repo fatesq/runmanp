@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Icon } from 'antd';
-import { TabBar, Drawer, List } from 'antd-mobile';
+import { TabBar, Drawer, List, Modal } from 'antd-mobile';
 import { Route, Redirect, Switch, NavLink } from 'dva/router';
 import { getRoutes } from '../utils/utils';
 import GetOrder from '../routes/Home';
@@ -18,6 +18,7 @@ class MobileLayout extends React.PureComponent {
   state = {
     open: false,
     selectedTab: '1',
+    show: false,
   }
 
   componentWillMount() {
@@ -27,9 +28,6 @@ class MobileLayout extends React.PureComponent {
     } 
     else if(localStorage.blackFlag != 4) {
       window.location.hash = '/Id'
-    }
-    else if(localStorage.depositStatus == 2) {
-      window.location.hash = '/yajin'
     }
   }
   onOpenChange = (tab = 1) => {

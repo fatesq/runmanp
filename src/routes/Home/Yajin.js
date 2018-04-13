@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { List, InputItem, Picker, Button, NavBar, Icon } from 'antd-mobile';
+import { List, InputItem, Picker, Button, NavBar, Icon, WingBlank, WhiteSpace } from 'antd-mobile';
 import { getConfig, alipayDeposit, wxpayDeposit, alipayRefundDeposit, wxpayRefundDeposit} from '../../services/api'; 
 
 const u = navigator.userAgent;
@@ -13,7 +13,7 @@ export default class Yajin extends React.PureComponent {
     pickerValue: [1],
     data: [{value: 1, label: '支付宝', children: []}, {value: 2, label: '微信', children: []}],
   }
-  componentWillMount(){
+  componentDidMount(){
     if (isAndroid) {
       // 这个是安卓操作系统
       const info = window.android.getUserInfo();
@@ -23,14 +23,19 @@ export default class Yajin extends React.PureComponent {
     }
     if (isIOS) {
       // 这个是ios操作系统
-      alert('getUserInfo之前');
-      const info = Native.getUserInfo('123');
-      alert(info);
-      getConfig({city: info.city || '南京'}).then(res =>{
-        this.setState({deposit:res.obj.deposit})
-      })
+      // alert('ios')
+      // window.onload=function(){ 
+        console.log('useinfo')
+        const info = window.Native.getUserInfo();
+        console.log('info.city')
+        getConfig({city: info.city || '南京'}).then(res =>{
+          console.log(res.obj.deposit);
+          this.setState({deposit:res.obj.deposit})
+        })
+      // } 
     } else {
       getConfig({city: '南京'}).then(res =>{
+        console.log(res)
         this.setState({deposit:res.obj.deposit})
       })
     }
@@ -102,20 +107,32 @@ export default class Yajin extends React.PureComponent {
           onLeftClick={() => { window.location.hash = '/'; }}
         >押金
         </NavBar>
-        <p style={{fontSize: '16px', fontWeight: 600, textAlign: 'center', padding: '10px 10px'}}>当前押金</p>
+        <p style={{fontSize: '16px', fontWeight: 600, textAlign: 'center', padding: '10px 10px'}}>{localStorage.depositStatus == 1 ? '已支付押金' : '充值金额'} </p>
         <p style={{fontSize: '16px', fontWeight: 600, textAlign: 'center', padding: '5px 10px'}}>￥ { deposit ? deposit / 100 : 0}</p>
+        <p style={{fontSize: '16px', textAlign: 'center', padding: '5px 10px', paddingBottom: '20px', borderBottom: '1px solid #CCC'}}>接满500单, 可提取押金</p>
         <Picker data={this.state.data} value={this.state.pickerValue} onOk={v => this.setState({ pickerValue: v })} cols={1} >
-          <List.Item arrow="horizontal">支付方式</List.Item>
+          <List.Item arrow="horizontal" style={{marginBottom: '20px'}}>支付方式</List.Item>
         </Picker>
-        <Button onClick={this.state.pickerValue[0] == 1 ? this.alipay : this.wxpay}>
-          { this.state.pickerValue[0] == 1 ? '支付宝' : '微信' }
-        </Button>
-        <Button onClick={this.state.pickerValue[0] == 1 ? this.reAlwxpiPay : this.reWxPay}>退还押金</Button>
+        <WingBlank>
+        { localStorage.depositStatus == 2
+          ?
+          (<Button type="primary" onClick={this.state.pickerValue[0] == 1 ? this.alipay : this.wxpay}>
+            { this.state.pickerValue[0] == 1 ? '支付宝支付' : '微信支付' }
+          </Button>)
+          :''
+        }  
+        { localStorage.depositStatus == 1
+          ?
+          (<Button type="ghost" onClick={this.state.pickerValue[0] == 1 ? this.reAlwxpiPay : this.reWxPay}>退还押金</Button>)
+          :''
+        }
+        <WhiteSpace />
         { localStorage.depositStatus == 2
           ?
           (<Button onClick={()=> { window.location.hash ='/user/login'}}>返回登录</Button>)
           :''
         }
+        </WingBlank>
       </div>
     )
   }

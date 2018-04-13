@@ -40,6 +40,7 @@ export default class Id extends React.PureComponent {
 		files: [],
 		files2: [],
 		realName: null,
+		show: false,
   }
   onChange = (files, type, index) => {
     console.log(files, type, index);
@@ -107,9 +108,11 @@ export default class Id extends React.PureComponent {
 		}
 		info.realName = this.state.realName
 		info.id = this.props.id
+		info.blackFlag = '3'
 		modifyRider(info).then(res=>{
 			if(res.status == '00') {
-				window.location.hash = '/yajin'
+				localStorage.blackFlag = 3
+				this.setState({show: true})
 			}else{
 				alert(res.msg)
 			}
@@ -120,7 +123,7 @@ export default class Id extends React.PureComponent {
 		return(
 			<List>
 				{ 
-					localStorage.blackFlag == 2 ?
+					this.state.show == false &&	(localStorage.blackFlag == 2 || localStorage.blackFlag == 5)?
 					(
 						<div>
 							<InputItem
@@ -150,9 +153,15 @@ export default class Id extends React.PureComponent {
 							<Button onClick={this.submit}>提交认证</Button>
 						</div>
 					)
-					: (<Button onClick={()=>{window.location.hash = '/user/login'}}>待审核</Button>)
+					: ''
 				}
-				
+				{
+					localStorage.blackFlag == 3 || this.state.show?
+					(<div style={{width: '100%'}}> 
+						<img style={{width: '100%'}} src="/s.png" onClick={()=> {window.location.hash = '/user/login'}} />
+					</div>)
+					:''
+				}
 			</List>	
 		);
 	}

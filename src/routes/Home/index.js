@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Icon } from 'antd';
-import { NavBar, Tabs, Card, List, Button } from 'antd-mobile';
+import { NavBar, Tabs, Card, List, Button, Modal} from 'antd-mobile';
 
 const { Item } = List;
 const { Brief } = Item;
@@ -45,17 +45,17 @@ export default class GetOrder extends React.PureComponent {
     }
     if (isIOS) {
       // 这个是ios操作系统
-      alert('getUserInfo之前');
-      const info = Native.getUserInfo('123');
-      alert(info);
-      this.setState({city: info.city || ''});
-      this.props.dispatch({
-        type: 'home/list',
-        payload: {
-          diu: info.diu || '24416E26-9265-4557-B7A1-28B64AE2CD86',
-          locations: info.locations || '118.783132,32.038221,1522153588',
-        },
-      });
+      window.onload = function(){
+        const info = Native.getUserInfo();
+        this.setState({city: info.city || ''});
+        this.props.dispatch({
+          type: 'home/list',
+          payload: {
+            diu: info.diu || '24416E26-9265-4557-B7A1-28B64AE2CD86',
+            locations: info.locations || '118.783132,32.038221,1522153588',
+          },
+        });
+      }
     } else {
       this.setState({city: '南京'});
       this.props.dispatch({
@@ -69,6 +69,10 @@ export default class GetOrder extends React.PureComponent {
   }
 
   sendOrder = (item) => {
+    if(localStorage.depositStatus == 2) {
+      this.setState({show: true})
+      return;
+    }
     this.props.dispatch({
       type: 'home/info',
       payload: item,
@@ -124,6 +128,15 @@ export default class GetOrder extends React.PureComponent {
             
           </div>
         </Tabs>
+        <Modal
+          visible={this.state.show}
+          transparent
+          maskClosable={false}
+          title={<p>需要缴纳<span style={{color:"#108ee9"}}>300元</span>押金方可抢单</p>}
+          footer={[{ text: '立即缴纳', onPress: () => { window.location.hash = '/yajin' } }]}
+        >
+          累计接单满500单可随时申请提取现金
+        </Modal>
       </div>
     );
   }
