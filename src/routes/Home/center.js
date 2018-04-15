@@ -80,6 +80,10 @@ export default class Center extends React.PureComponent {
 								合作伙伴
 							</List.Item>
 						</NavLink>
+						<WhiteSpace />
+						<List.Item arrow="horizontal" onClick={() => {window.location.hash = '/user/login'}}> 
+							退出登录
+						</List.Item>
 					</div>          
         );
     }

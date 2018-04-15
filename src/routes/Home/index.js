@@ -16,7 +16,7 @@ export default class GetOrder extends React.PureComponent {
     city: '',
   }
   componentDidMount() {
-   this.props.restart();
+   this.props.restart(1);
    this.getOrder()
    this.interval = setInterval(() => this.getOrder(), 15000);  
   }

@@ -184,3 +184,11 @@ export async function addCooperation(params) {
     data: params,
   });
 }
+
+
+export async function getTodayData(params) {
+  return request('/api/rider/getTodayData', {
+    method: 'POST',
+    data: params,
+  });
+}

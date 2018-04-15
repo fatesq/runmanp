@@ -81,6 +81,7 @@ export default class Yajin extends React.PureComponent {
     alipayRefundDeposit({riderId: localStorage.id}).then(res=>{
       if(res.status == '00'){
         alert('成功转入支付宝')
+        localStorage.depositStatus = 2
         window.location.hash = '/'
       }else{
         alert(res.msg)
@@ -90,7 +91,8 @@ export default class Yajin extends React.PureComponent {
   reWxPay = () => {
     wxpayRefundDeposit({riderId: localStorage.id}).then(res=>{
       if(res.status == '00'){
-        alert('成功转入微信')        
+        alert('成功转入微信')
+        localStorage.depositStatus = 2        
         window.location.hash = '/'
       }else{
         alert(res.msg)

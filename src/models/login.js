@@ -26,6 +26,8 @@ export default {
         localStorage.orderCount = response.obj.orderCount
         localStorage.star = response.obj.star
         localStorage.realName = response.obj.realName
+        localStorage.alipayAccount = response.obj.alipayAccount
+        localStorage.selectedTab = '3'
       }
       // Login successfully
       if (response.status === '00' && response.obj.phone) {

@@ -22,15 +22,19 @@ class MobileLayout extends React.PureComponent {
   }
 
   componentWillMount() {
-    this.setState({selectedTab: '1'})
+    this.setState({selectedTab: localStorage.selectedTab})
     if (!this.props.openid) {
       window.location.hash = '/user/login';
     } 
     else if(localStorage.blackFlag != 4) {
       window.location.hash = '/Id'
     }
+    if(localStorage.depositStatus == 2 && localStorage.selectedTab == 1) {
+      this.setState({show: true})
+      return;
+    }
   }
-  onOpenChange = (tab = 1) => {
+  onOpenChange = (tab = 3) => {
     this.setState({selectedTab: tab});
   }
 
@@ -54,6 +58,7 @@ class MobileLayout extends React.PureComponent {
   }
 
   render() {
+    console.log(this.state.selectedTab)
     return (
         <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0 }}>
           <TabBar
@@ -72,6 +77,12 @@ class MobileLayout extends React.PureComponent {
                 this.setState({
                   selectedTab: '1',
                 });
+                localStorage.selectedTab = 1
+                if(localStorage.depositStatus == 2) {
+                  this.setState({show: true})
+                  return;
+                }
+               
               }}
               data-seed="logId"
             >
@@ -99,6 +110,7 @@ class MobileLayout extends React.PureComponent {
                 this.setState({
                   selectedTab: '2',
                 });
+                localStorage.selectedTab = 2
               }}
               data-seed="logId1"
             >
@@ -126,11 +138,21 @@ class MobileLayout extends React.PureComponent {
                 this.setState({
                   selectedTab: '3',
                 });
+                localStorage.selectedTab = 3
               }}
             >
               {<Center />}
             </TabBar.Item>
           </TabBar>
+          <Modal
+            visible={this.state.show}
+            transparent
+            maskClosable={false}
+            title={<p>需要缴纳<span style={{color:"#108ee9"}}>300元</span>押金方可抢单</p>}
+            footer={[{ text: '立即缴纳', onPress: () => { window.location.hash = '/yajin'; localStorage.selectedTab = 3; } }]}
+          >
+            累计接单满500单可随时申请提取现金
+          </Modal>
         </div>
     );
   }
