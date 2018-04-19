@@ -3,8 +3,19 @@ import { connect } from 'dva';
 import { List, InputItem, Icon, NavBar, Button } from 'antd-mobile';
 import { NavLink } from 'dva/router';
 
-
+const u = navigator.userAgent;
+const app = navigator.appVersion;
+const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // g
+const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
 export default class Pay extends React.PureComponent {
+	bindWX=()=>{
+		if (isAndroid) {
+			window.android.WeChatLogin()
+		}
+		if (isIOS) {
+			Native.WeChatLogin()
+		}
+	}
     render() {
       return(
 				<div>
@@ -33,8 +44,9 @@ export default class Pay extends React.PureComponent {
 						</NavLink>
 					</div>
 					<NavLink to="/bind">
-						<Button>绑定支付账号</Button>
-					</NavLink>	
+						<Button>绑定支付宝</Button>
+					</NavLink>
+					<Button onClick={() => this.bindWX}>绑定微信</Button>
 				</div>
 			)
     }
