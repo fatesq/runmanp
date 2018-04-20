@@ -192,3 +192,10 @@ export async function getTodayData(params) {
     data: params,
   });
 }
+
+export async function bindWxAccount(params) {
+  return request('/api/rider/bindWxAccount', {
+    method: 'POST',
+    data: params,
+  });
+}

@@ -41,7 +41,7 @@ export default class Id extends React.PureComponent {
 		files2: [],
 		realName: null,
 		show: false,
-  }
+	}
   onChange = (files, type, index) => {
     console.log(files, type, index);
     this.setState({
