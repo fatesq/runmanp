@@ -24,15 +24,26 @@ export default class Pay extends React.PureComponent {
 				}
 			})
 		}
+		window.android.WeChatLogin = function(res){
+			const info = {
+				id:localStorage.id,
+				openid:res
+			}
+			bindWxAccount(info),then(re=> {
+				if(re.status == '00'){
+					alert('绑定成功')
+				}else{
+					alert(res.msg)
+				}
+			})
+		}
 	}
 	bindWX=()=>{
 		if (isAndroid) {
 			window.android.WeChatLogin()
 		}
 		if (isIOS) {
-			alert('ios')
 			const res = Native.WeChatLogin()
-			alert(res)
 		}
 	}
 	render() {

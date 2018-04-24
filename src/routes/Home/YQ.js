@@ -5,6 +5,10 @@ const tabs = [
   { title: '我的邀请' },
   { title: '奖励明细' },
 ];
+const u = navigator.userAgent;
+const app = navigator.appVersion;
+const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // g
+const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
 export default class YQ extends React.PureComponent {
   state = {
     index: 0,
@@ -30,8 +34,37 @@ export default class YQ extends React.PureComponent {
     }).then(res => {
       this.setState({list2: res.rows})
     })
-    
   }
+  Share = (type) => {
+    const info = {
+      title: '巴比跑腿',
+      URL: `http://39.107.112.14:6479/getshare?phone=${localStorage.phone}`,
+      type,
+      content: '巴比跑腿',
+    };
+    if (isAndroid) {
+      window.android.WeChatShare(JSON.stringify(info))
+    }
+    if (isIOS) {
+      Native.WeChatShare(info)
+    }  
+  }
+
+  Share2 = (type) => {
+    const info = {
+      title: '巴比跑腿',
+      URL: `http://39.107.112.14:6479/getshare?phone=${localStorage.phone}&type=2`,
+      type,
+      content: '巴比跑腿',
+    };
+    if (isAndroid) {
+      window.android.WeChatShare(JSON.stringify(info))
+    }
+    if (isIOS) {
+      Native.WeChatShare(info)
+    }  
+  }
+
   render() {
     return (
       <div style={{ width: '100%', textAlign: 'center' }} >
@@ -50,10 +83,10 @@ export default class YQ extends React.PureComponent {
                 <img style={{ width: '100%', maxWidth: '750px', height: 'auto', margin: '0 auto' }} src="/one.jpg" alt="" />
                 <div style={{display: 'flex', backgroundColor: '#FFF', margin: '20px', padding: '10px'}}>
                   <div style={{ flex: 1 }}>
-                    <img src="/i1.png" style={{ width: '50px', height: '50px'}} alt="" />
+                    <img src="/i1.png" style={{ width: '50px', height: '50px'}} alt="" onClick={this.Share(1)}/>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <img src="/i2.jpg" style={{ width: '50px', height: '50px'}} alt="" />
+                    <img src="/i2.jpg" style={{ width: '50px', height: '50px'}} alt="" onClick={this.Share(2)}/>
                   </div>
                   <div style={{ flex: 1 }}>
                     <img src="/i3.png" style={{ width: '50px', height: '50px'}} alt="" />
@@ -97,10 +130,10 @@ export default class YQ extends React.PureComponent {
                 <img style={{ width: '100%', maxWidth: '750px', height: 'auto', margin: '0 auto' }} src="/two.jpg" alt="" />
                 <div style={{display: 'flex', backgroundColor: '#FFF', margin: '20px', padding: '10px', border: '2px solid #6d3a0f'}}>
                   <div style={{ flex: 1 }}>
-                    <img src="/i1.png" style={{ width: '50px', height: '50px'}} alt="" />
+                    <img src="/i1.png" style={{ width: '50px', height: '50px'}} alt="" onClick={this.Share2(1)}/>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <img src="/i2.jpg" style={{ width: '50px', height: '50px'}} alt="" />
+                    <img src="/i2.jpg" style={{ width: '50px', height: '50px'}} alt="" onClick={this.Share2(2)}/>
                   </div>
                   <div style={{ flex: 1 }}>
                     <img src="/i3.png" style={{ width: '50px', height: '50px'}} alt="" />

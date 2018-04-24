@@ -47,6 +47,7 @@ export default class LoginPage extends Component {
     console.log(isAndroid, isIOS, app);
     if (isAndroid) {
       // 这个是安卓操作系统
+      window.android.getUserInfo()
     }
     if (isIOS && window.iOSNative) {
       // 这个是ios操作系统

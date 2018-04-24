@@ -49,7 +49,7 @@ export default class Yajin extends React.PureComponent {
     wxpayDeposit(info).then(res=>{
       if(res.status == '00'){
         if (isAndroid) {
-          window.android.wxDep(res);
+          window.android.wxDep(JSON.stringify(res));
         }
         if (isIOS) {
           Native.wxDep(res)
@@ -67,7 +67,7 @@ export default class Yajin extends React.PureComponent {
     alipayDeposit(info).then(res=>{
       if(res.status == '00'){
         if (isAndroid) {
-          window.android.aliDep(res)
+          window.android.aliDep(JSON.stringify(res))
         }
         if (isIOS) {
           Native.aliDep(res)
