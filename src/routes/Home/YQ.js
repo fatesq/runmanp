@@ -83,10 +83,10 @@ export default class YQ extends React.PureComponent {
                 <img style={{ width: '100%', maxWidth: '750px', height: 'auto', margin: '0 auto' }} src="/one.jpg" alt="" />
                 <div style={{display: 'flex', backgroundColor: '#FFF', margin: '20px', padding: '10px'}}>
                   <div style={{ flex: 1 }}>
-                    <img src="/i1.png" style={{ width: '50px', height: '50px'}} alt="" onClick={this.Share(1)}/>
+                    <img src="/i1.png" style={{ width: '50px', height: '50px'}} alt="" onClick={() => this.Share(1)}/>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <img src="/i2.jpg" style={{ width: '50px', height: '50px'}} alt="" onClick={this.Share(2)}/>
+                    <img src="/i2.jpg" style={{ width: '50px', height: '50px'}} alt="" onClick={() => this.Share(2)}/>
                   </div>
                   <div style={{ flex: 1 }}>
                     <img src="/i3.png" style={{ width: '50px', height: '50px'}} alt="" />
@@ -130,10 +130,10 @@ export default class YQ extends React.PureComponent {
                 <img style={{ width: '100%', maxWidth: '750px', height: 'auto', margin: '0 auto' }} src="/two.jpg" alt="" />
                 <div style={{display: 'flex', backgroundColor: '#FFF', margin: '20px', padding: '10px', border: '2px solid #6d3a0f'}}>
                   <div style={{ flex: 1 }}>
-                    <img src="/i1.png" style={{ width: '50px', height: '50px'}} alt="" onClick={this.Share2(1)}/>
+                    <img src="/i1.png" style={{ width: '50px', height: '50px'}} alt="" onClick={() => this.Share2(1)}/>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <img src="/i2.jpg" style={{ width: '50px', height: '50px'}} alt="" onClick={this.Share2(2)}/>
+                    <img src="/i2.jpg" style={{ width: '50px', height: '50px'}} alt="" onClick={() => this.Share2(2)}/>
                   </div>
                   <div style={{ flex: 1 }}>
                     <img src="/i3.png" style={{ width: '50px', height: '50px'}} alt="" />

@@ -24,7 +24,7 @@ export default class Pay extends React.PureComponent {
 				}
 			})
 		}
-		window.android.WeChatLogin = function(res){
+		window.ReWeChatLogin = function(res){
 			const info = {
 				id:localStorage.id,
 				openid:res
