@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Icon, Form } from 'antd';
-import { Button, Switch, List, TextareaItem, Stepper, WhiteSpace, Radio, Flex, Modal, Tag, Checkbox, DatePicker } from 'antd-mobile';
+import { NavBar, Button, Switch, List, TextareaItem, Stepper, WhiteSpace, Radio, Flex, Modal, Tag, Checkbox, DatePicker } from 'antd-mobile';
 import moment from 'moment';
 import styles from './index.less';
 
@@ -50,6 +50,12 @@ export default class Deliver extends React.PureComponent {
     const {info}= this.props.home;
     return (
       <div>
+        <NavBar
+          mode="light"
+          icon={<Icon type="left" />}
+          onLeftClick={() => { window.location.hash = '/'; }}
+        >订单信息
+        </NavBar>
         <List>
           <iframe
             id="test"

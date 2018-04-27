@@ -14,6 +14,8 @@ export default class YQ extends React.PureComponent {
     index: 0,
     list1:[],
     list2:[],
+    list3:[],
+    list4:[],
   }
   componentWillMount() {
     process({
@@ -34,11 +36,31 @@ export default class YQ extends React.PureComponent {
     }).then(res => {
       this.setState({list2: res.rows})
     })
+    process({
+      bean: 'user',
+      method: 'pageUser',
+      invitorPhone: localStorage.phone,
+      page: 1,
+      rows: 99,
+      invitorType: 2,
+    }).then(res => {
+      this.setState({list3: res.rows})
+    })
+    process({
+      bean: 'bounty',
+      method: 'pageBounty',
+      invitorPhone: localStorage.phone,
+      page: 1,
+      rows: 99,
+      userType: 2,
+    }).then(res => {
+      this.setState({list4: res.rows})
+    })
   }
   Share = (type) => {
     const info = {
       title: '巴比跑腿',
-      URL: `http://39.107.112.14:6479/getshare?phone=${localStorage.phone}`,
+      URL: `http://rider.shjcqg.com/getshare?phone=${localStorage.phone}&invitorType=2`,
       type,
       content: '巴比跑腿',
     };
@@ -53,7 +75,7 @@ export default class YQ extends React.PureComponent {
   Share2 = (type) => {
     const info = {
       title: '巴比跑腿',
-      URL: `http://39.107.112.14:6479/getshare?phone=${localStorage.phone}&type=2`,
+      URL: `http://rider.shjcqg.com/getshare?phone=${localStorage.phone}&type=2`,
       type,
       content: '巴比跑腿',
     };
@@ -81,7 +103,7 @@ export default class YQ extends React.PureComponent {
             <div>
               <div style={{ backgroundColor: '#FFF', paddingBottom: '20px' }}>
                 <img style={{ width: '100%', maxWidth: '750px', height: 'auto', margin: '0 auto' }} src="/one.jpg" alt="" />
-                <div style={{display: 'flex', backgroundColor: '#FFF', margin: '20px', padding: '10px'}}>
+                <div style={{ display: 'flex', backgroundColor: '#FFF', margin: '20px', padding: '10px'}}>
                   <div style={{ flex: 1 }}>
                     <img src="/i1.png" style={{ width: '50px', height: '50px'}} alt="" onClick={() => this.Share(1)}/>
                   </div>
@@ -89,29 +111,29 @@ export default class YQ extends React.PureComponent {
                     <img src="/i2.jpg" style={{ width: '50px', height: '50px'}} alt="" onClick={() => this.Share(2)}/>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <img src="/i3.png" style={{ width: '50px', height: '50px'}} alt="" />
+                    <img src="/i3.png" style={{ width: '50px', height: '50px'}} alt="" onClick={() => this.Share(3)}/>
                   </div>
                 </div>
               </div>  
               <Tabs tabs={tabs}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '250px', backgroundColor: '#fff' }}>
+                <div style={{ alignItems: 'center', justifyContent: 'center', height: '250px', overflow:'scroll', backgroundColor: '#fff' }}>
                   {
-                    this.state.list1 ?
+                    this.state.list3 ?
                     (
-                      this.state.list1.map(item=> {
+                      this.state.list3.map(item=> {
                         return (
-                          <p style={{padding: '5px'}}>{item.bountyDesc}</p>
+                          <p style={{padding: '5px'}}>成功邀请：{item.phone}</p>
                         )
                       })
                     )
                     : '您还没有奖励'
                   }
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '250px', backgroundColor: '#fff' }}>
+                <div style={{ alignItems: 'center', justifyContent: 'center', height: '250px', overflow:'scroll', backgroundColor: '#fff' }}>
                   {
-                    this.state.list2 ?
+                    this.state.list4 ?
                     (
-                      this.state.list2.map(item=> {
+                      this.state.list4.map(item=> {
                         return (
                           <p style={{padding: '5px'}}>{item.bountyDesc}</p>
                         )
@@ -136,25 +158,25 @@ export default class YQ extends React.PureComponent {
                     <img src="/i2.jpg" style={{ width: '50px', height: '50px'}} alt="" onClick={() => this.Share2(2)}/>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <img src="/i3.png" style={{ width: '50px', height: '50px'}} alt="" />
+                    <img src="/i3.png" style={{ width: '50px', height: '50px'}} alt="" onClick={() => this.Share2(3)}/>
                   </div>
                 </div>
               </div>  
               <Tabs tabs={tabs}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '250px', backgroundColor: '#fff' }}>
+                <div style={{ alignItems: 'center', justifyContent: 'center', height: '250px', overflow:'scroll', backgroundColor: '#fff' }}>
                   {
                     this.state.list1 ?
                     (
                       this.state.list1.map(item=> {
                         return (
-                          <p style={{padding: '5px'}}>{item.bountyDesc}</p>
+                          <p style={{padding: '5px'}}>{item.phone}</p>
                         )
                       })
                     )
                     : '您还没有奖励'
                   }
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '250px', backgroundColor: '#fff' }}>
+                <div style={{ alignItems: 'center', justifyContent: 'center', height: '250px', overflow:'scroll', backgroundColor: '#fff' }}>
                   {
                     this.state.list2 ?
                     (

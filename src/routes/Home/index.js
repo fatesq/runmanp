@@ -9,6 +9,10 @@ const tabs = [
   { title: '全部订单', sub: '1' },
   { title: '离我最近', sub: '2' },
 ];
+const u = navigator.userAgent;
+const app = navigator.appVersion;
+const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // g
+const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
 
 @connect(({ home, login}) => ({ home, login}))
 export default class GetOrder extends React.PureComponent {
@@ -17,19 +21,24 @@ export default class GetOrder extends React.PureComponent {
   }
   componentDidMount() {
    this.props.restart(1);
-   this.getOrder()
-   this.interval = setInterval(() => this.getOrder(), 15000);  
+   if (!isIOS) {
+    window.setTimeout(this.getOrder(),1500);
+    this.interval();
+   } else {
+     
+   }
   }
 
   componentWillUnmount() {  
     clearInterval(this.interval);  
-  }  
+  }
 
-  getOrder = () => {
-    const u = navigator.userAgent;
-    const app = navigator.appVersion;
-    const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // g
-    const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
+  interval = () => {
+    setInterval(() => this.getOrder(), 15000); 
+  }
+
+  getOrder = (info) => {
+
     console.log(isAndroid, isIOS, app);
     if (isAndroid) {
       // 这个是安卓操作系统
@@ -40,12 +49,14 @@ export default class GetOrder extends React.PureComponent {
         payload: {
           diu: info.diu || '24416E26-9265-4557-B7A1-28B64AE2CD86',
           locations: info.locations || '118.783132,32.038221,1522153588',
+          riderId: localStorage.id
         },
       });
     }
     if (isIOS) {
       // 这个是ios操作系统
-      window.onload = function(){
+      // window.onload = function(){
+        // alert('ios')
         const info = Native.getUserInfo();
         this.setState({city: info.city || ''});
         this.props.dispatch({
@@ -53,9 +64,10 @@ export default class GetOrder extends React.PureComponent {
           payload: {
             diu: info.diu || '24416E26-9265-4557-B7A1-28B64AE2CD86',
             locations: info.locations || '118.783132,32.038221,1522153588',
+            riderId: localStorage.id
           },
-        });
-      }
+        })
+      // }
     } else {
       this.setState({city: '南京'});
       this.props.dispatch({
@@ -63,6 +75,7 @@ export default class GetOrder extends React.PureComponent {
         payload: {
           diu: '24416E26-9265-4557-B7A1-28B64AE2CD86',
           locations: '118.804875,32.011594,1522417977',
+          riderId: localStorage.id
         },
       });
     }
@@ -80,6 +93,10 @@ export default class GetOrder extends React.PureComponent {
     
   }
   render() {
+    window.viewDidLoad = () => {
+      this.getOrder();
+      this.interval();
+    }
     return (
       <div>
         <NavBar
