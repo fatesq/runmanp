@@ -32,7 +32,8 @@ export default class YQ extends React.PureComponent {
       method: 'pageBounty',
       invitorPhone: localStorage.phone,
       page: 1,
-      rows: 99
+      rows: 99,
+      userType: 2,
     }).then(res => {
       this.setState({list2: res.rows})
     })
@@ -169,7 +170,7 @@ export default class YQ extends React.PureComponent {
                     (
                       this.state.list1.map(item=> {
                         return (
-                          <p style={{padding: '5px'}}>{item.phone}</p>
+                          <p style={{padding: '5px'}}>成功邀请：{item.phone}</p>
                         )
                       })
                     )
