@@ -3,11 +3,16 @@ import { connect } from 'dva';
 import { Icon, Form } from 'antd';
 import { NavBar, Button, Switch, List, TextareaItem, Stepper, WhiteSpace, Radio, Flex, Modal, Tag, Checkbox, DatePicker } from 'antd-mobile';
 import moment from 'moment';
+import { SMS, signOrder } from '../../services/api';
 import styles from './index.less';
 
-
+const u = navigator.userAgent;
+const app = navigator.appVersion;
+const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // g
+const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
 const { Item } = List;
 const { Brief } = Item;
+const prompt = Modal.prompt;
 @connect(({ home, login, loading }) => ({
   home,
   login,
@@ -46,6 +51,46 @@ export default class Deliver extends React.PureComponent {
     });
     history.back();
   }
+
+  overOrder = (orderId) => {
+    SMS({orderId:orderId}).then(res => {
+       if(res.status == '00'){
+          prompt(
+            '完成订单',
+            '请输入来自客户的验证码',
+            [
+              { text: '取消' },
+              { text: '确定', onPress: value => this.postSMS(orderId,value) },
+            ], 
+            'default',
+            ''
+          )
+       }else{
+          alert(res.msg);
+       }
+    })
+  }
+
+  postSMS = (id,code) => {
+    signOrder({orderId:id,checkCode:code}).then(res=>{
+      if(res.status == '00') {
+        prompt().close()
+        window.history.back();
+      }else{
+        alert(res.msg)
+      }
+    })
+  }
+
+  Call = (phone) =>{
+    if (isAndroid) {
+      window.android.callNum(phone.trim())
+    }
+    if (isIOS) {
+      Native.callNum(phone.trim())
+    }  
+  }
+
   render() {
     const {info}= this.props.home;
     return (
@@ -65,10 +110,16 @@ export default class Deliver extends React.PureComponent {
             frameBorder="0"
           >
           </iframe>
-          <Item arrow="horizontal">
+          <Item arrow="horizontal" onClick={()=>this.Call(info.sendPhone)}>
+            发货联系:{info.sendPhone}
+          </Item>
+          <Item>
            {info.sendStreet}
           </Item>
-          <Item arrow="horizontal">
+          <Item arrow="horizontal" onClick={()=>this.Call(info.receiverPhone)}>
+            收货联系:{info.receiverPhone}
+          </Item>
+          <Item>
           {info.receiverStreet}
           </Item>
           <Item align="top" multipleLine>
@@ -101,8 +152,17 @@ export default class Deliver extends React.PureComponent {
         </List>
         <WhiteSpace size="xs" />
         { info.orderStatus == 1?<Button  type="primary" onClick={()=>{this.sendOrder(info.orderId)}}>立刻接单</Button>: ''} 
-        { info.orderStatus == 3?<Button  type="primary" onClick={()=>{this.cancelOrder(info.orderId)}}>取消订单</Button>: ''} 
-        { info.orderStatus == 5?<Button>订单完成</Button>: ''} 
+        { info.orderStatus == 3
+          ? 
+          <div style={{ display: 'flex'}}>
+            <div style={{ flex: 1}}>
+              <Button type="warning" onClick={()=>{this.cancelOrder(info.orderId)}}>取消订单</Button>
+            </div>
+            <div style={{ flex: 1}}>
+              <Button type="primary" onClick={()=>{this.overOrder(info.orderId)}}>完成订单</Button>
+            </div>
+          </div>:''
+        } 
       </div>
     );
   }

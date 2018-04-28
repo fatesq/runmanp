@@ -8,6 +8,21 @@ export async function login(params) {
   });
 }
 
+export async function SMS(params) {
+  return request('/api/order/signSendSms', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+export async function signOrder(params) {
+  return request('/api/order/signOrder', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+
 export async function sendMessage(params) {
   return request('/api/rider/sendCheckCode', {
     method: 'POST',
