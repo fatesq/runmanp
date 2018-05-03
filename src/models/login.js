@@ -7,7 +7,7 @@ export default {
   namespace: 'login',
 
   state: {
-    id: localStorage.id,
+    id: localStorage.id || '10010-88888888',
   },
   effects: {
     *login({ payload }, { call, put }) {

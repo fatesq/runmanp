@@ -22,6 +22,17 @@ class MobileLayout extends React.PureComponent {
   }
 
   componentWillMount() {
+    // localStorage.id = '10010-88888888'
+    // localStorage.depositStatus = 1
+    // localStorage.blackFlag = 4
+    // localStorage.amount = 0
+    // localStorage.deposit = 0
+    // localStorage.phone = '11111111111'
+    // localStorage.orderCount = 0
+    // localStorage.star = 5
+    // localStorage.realName = '客户'
+    // localStorage.alipayAccount = ''
+    // localStorage.selectedTab = '3'
     this.setState({selectedTab: localStorage.selectedTab})
     if (!this.props.openid) {
       window.location.hash = '/user/login';

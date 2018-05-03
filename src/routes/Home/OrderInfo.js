@@ -5,7 +5,8 @@ import { NavBar, Button, Switch, List, TextareaItem, Stepper, WhiteSpace, Radio,
 import moment from 'moment';
 import { SMS, signOrder } from '../../services/api';
 import styles from './index.less';
-
+const GOODS = ['文件', '鲜花', '蛋糕', '水果生鲜', '食品饮料', '其他'];
+const GOODS2 = ['其他', '医院排队', '小时工', '万能排队', '照看宠物', '餐厅占座', '购物', '公务'];
 const u = navigator.userAgent;
 const app = navigator.appVersion;
 const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // g
@@ -113,14 +114,14 @@ export default class Deliver extends React.PureComponent {
           <Item arrow="horizontal" onClick={()=>this.Call(info.sendPhone)}>
             发货联系:{info.sendPhone}
           </Item>
-          <Item>
-           {info.sendStreet}
+          <Item wrap={true}>
+           {info.sendAddress + info.sendStreet}
           </Item>
           <Item arrow="horizontal" onClick={()=>this.Call(info.receiverPhone)}>
             收货联系:{info.receiverPhone}
           </Item>
-          <Item>
-          {info.receiverStreet}
+          <Item wrap={true}>
+            {info.receiverAddress + info.receiverStreet}
           </Item>
           <Item align="top" multipleLine>
               <div className={styles.center}><Icon type="clock-circle-o" /> {info.departureTime}</div>
@@ -128,20 +129,32 @@ export default class Deliver extends React.PureComponent {
         </List>
         <WhiteSpace size="xs" />
         <List>
-          <Item>
-            物品信息
-            <Brief>
-              <Flex style={{ textAlign: 'center' }}>
-                <Flex.Item className={styles.column} ><Icon type="appstore" /><span>1</span></Flex.Item>
-                <Flex.Item className={styles.column} ><Icon type="pay-circle" /><span>{info.goodsValue}</span></Flex.Item>
-                <Flex.Item className={styles.column} ><Icon type="tag" /><span>{info.goodsWeight}公斤</span></Flex.Item>
-              </Flex>
-            </Brief>
+          <Item wrap={true}>
+            物品类型：{info.orderType ==4 ? GOODS2[info.goodsType] : GOODS[info.goodsType]}
           </Item>
-          <Item
-            extra={info.signFace == 1? "是":'否'}
-          >
-              当面签收
+          <Item wrap={true}>
+            物品价值：{info.goodsValue}
+          </Item>
+          <Item wrap={true}>
+            物品重量：{info.goodsWeight} kg
+          </Item>
+          {
+            /** <Item>
+              物品信息
+              <Brief>
+                <Flex style={{ textAlign: 'center' }}>
+                  <Flex.Item className={styles.column} ><Icon type="appstore" /><span>{info.orderType ==4 ? GOODS2[info.goodsType] : GOODS[info.goodsType]}</span></Flex.Item>
+                  <Flex.Item className={styles.column} ><Icon type="pay-circle" /><span>{info.goodsValue}</span></Flex.Item>
+                  <Flex.Item className={styles.column} ><Icon type="tag" /><span>{info.goodsWeight}公斤</span></Flex.Item>
+                </Flex>
+              </Brief>
+            </Item> **/
+          }
+          <Item wrap={true}>
+            支付方式：{info.payType == 1 ? '微信支付' : '支付宝支付'}
+          </Item>
+          <Item>
+              当面签收：{info.signFace == 1? "是":'否'}
           </Item>
           <TextareaItem
             title="备注信息"
